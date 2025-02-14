@@ -90,6 +90,7 @@ jobs:
           echo "Running test_rs"
           runuser -u ci -- python setup.py test_rs
 
+
   docker:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
