@@ -54,7 +54,7 @@ jobs:
       - name: Setup container
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm tar python-flake8  # Install flake8 via pacman
+          pacman -S --noconfirm tar python python-virtualenv  # Install Python and venv support
 
       - name: Checkout source code
         uses: actions/checkout@master
@@ -64,8 +64,16 @@ jobs:
       - name: Install calibre dependencies
         run: setup/arch-ci.sh
 
+      - name: Create Virtual Environment & Install flake8
+        run: |
+          python -m venv venv  # Create a virtual environment
+          source venv/bin/activate  # Activate the virtual environment
+          pip install --upgrade pip
+          pip install flake8  # Install flake8 inside venv
+
       - name: Run Linting (flake8) [Allow Failure]
         run: |
+          source venv/bin/activate
           flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics || true
           flake8 src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics || true
 
@@ -81,4 +89,5 @@ jobs:
           runuser -u ci -- python setup.py test --under-sanitize
           echo "Running test_rs"
           runuser -u ci -- python setup.py test_rs
+  
   
