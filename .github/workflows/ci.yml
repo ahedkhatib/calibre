@@ -89,7 +89,6 @@ jobs:
           runuser -u ci -- python setup.py test --under-sanitize
           echo "Running test_rs"
           runuser -u ci -- python setup.py test_rs
-  
 
   docker:
     name: Build and Push Docker Image
